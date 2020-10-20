@@ -20,10 +20,8 @@ output:
   knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
   options(width = 90)
 ```
-## Abstract
 
 ## Introduction
-
 
 ```{r data import}
 library(readr)

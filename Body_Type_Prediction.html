@@ -1638,7 +1638,6 @@ summary {
 
 <div id="TOC">
 <ul>
-<li><a href="#abstract">Abstract</a></li>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#analysis">Analysis</a><ul>
 <li><a href="#data-cleaning">Data Cleaning</a></li>
@@ -1648,14 +1647,11 @@ summary {
 </ul>
 </div>
 
-<div id="abstract" class="section level2">
-<h2>Abstract</h2>
-</div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <pre class="r"><code>library(readr)
 okc &lt;- read_csv(&quot;https://uofi.box.com/shared/static/oy32nc373w4jqz3kummksnw6wvhfrl7a.csv&quot;, 
-                col_types = cols(last_online = col_datetime(format = &quot;%Y-%m-%d-%H-%M&quot;)))
+    col_types = cols(last_online = col_datetime(format = &quot;%Y-%m-%d-%H-%M&quot;)))
 colnames(okc) &lt;- tolower(colnames(okc))</code></pre>
 </div>
 <div id="analysis" class="section level2">
@@ -1666,28 +1662,32 @@ colnames(okc) &lt;- tolower(colnames(okc))</code></pre>
 <pre class="r"><code>library(tidyverse)
 
 # remove the 10 essay related variables
-okc.keep = colnames(okc)[grepl(&quot;essay&quot;,colnames(okc)) == F]
-okc.clean = select(okc,okc.keep)
+okc.keep = colnames(okc)[grepl(&quot;essay&quot;, colnames(okc)) == F]
+okc.clean = select(okc, okc.keep)
 
-# remove speaks,sign, last_online and location, they don't seem to have relationships with body_type
-okc.clean = subset(okc.clean, select = -c(speaks,sign,last_online,location,income))
+# remove speaks,sign, last_online and location, they don't
+# seem to have relationships with body_type
+okc.clean = subset(okc.clean, select = -c(speaks, sign, last_online, 
+    location, income))
 
-# remove abnormal height; we define normal heights as between 55 and 80 inches
+# remove abnormal height; we define normal heights as between
+# 55 and 80 inches
 okc.clean = filter(okc.clean, height &gt;= 55 &amp; height &lt;= 80)
 
-# remove &quot;rather not say&quot; &amp; &quot;used up&quot; in body_type category
-okc.clean = filter(okc.clean, body_type != &quot;rather not say&quot; &amp; body_type != &quot;used up&quot;)
+# remove 'rather not say' &amp; 'used up' in body_type category
+okc.clean = filter(okc.clean, body_type != &quot;rather not say&quot; &amp; 
+    body_type != &quot;used up&quot;)
 
 # get a summary of how many NAs each variables have
 colnames.okc.clean = colnames(okc.clean)
-summary.NAs = data.frame(colnames = colnames.okc.clean, 
-                 NAs = sapply(1:length(colnames.okc.clean), function(i) sum(is.na(okc.clean[,i]))))
-#summary.NAs
-# remove variables with NA &gt;= 10,000
+summary.NAs = data.frame(colnames = colnames.okc.clean, NAs = sapply(1:length(colnames.okc.clean), 
+    function(i) sum(is.na(okc.clean[, i]))))
+# summary.NAs remove variables with NA &gt;= 10,000
 okc.keep = summary.NAs$colnames[which(summary.NAs$NAs &lt; 10000)]
-okc.clean = select(okc.clean,okc.keep)
-character.vars = lapply(okc.clean,class) == &quot;character&quot;
-okc.clean[,character.vars] = lapply(okc.clean[,character.vars],as.factor)
+okc.clean = select(okc.clean, okc.keep)
+character.vars = lapply(okc.clean, class) == &quot;character&quot;
+okc.clean[, character.vars] = lapply(okc.clean[, character.vars], 
+    as.factor)
 
 # remove NAs in the dataset
 okc.clean = na.omit(okc.clean)
@@ -1729,7 +1729,8 @@ dim(okc.clean)</code></pre>
 <pre class="r"><code># recategorize variable factors
 smokes = ifelse(okc.clean$smokes == &quot;yes&quot;, &quot;yes&quot;, &quot;no&quot;)
 okc.clean$smokes = as.factor(smokes)
-status = ifelse(okc.clean$status == &quot;available&quot;|okc.clean$status == &quot;single&quot;, &quot;available&quot;, &quot;not available&quot;)
+status = ifelse(okc.clean$status == &quot;available&quot; | okc.clean$status == 
+    &quot;single&quot;, &quot;available&quot;, &quot;not available&quot;)
 okc.clean$status = as.factor(status)
 
 okc.clean$body_type[okc.clean$body_type == &quot;a little extra&quot;] = &quot;overweight&quot;
@@ -1741,7 +1742,8 @@ okc.clean$body_type[okc.clean$body_type == &quot;skinny&quot;] = &quot;thin&quot
 okc.clean$body_type = droplevels(okc.clean$body_type)
 
 okc.clean$ethnicity = as.character(okc.clean$ethnicity)
-okc.clean$ethnicity[sapply(okc.clean$ethnicity,function(x) grepl(&quot;,&quot;,x)) != 0] = &quot;mixed&quot;
+okc.clean$ethnicity[sapply(okc.clean$ethnicity, function(x) grepl(&quot;,&quot;, 
+    x)) != 0] = &quot;mixed&quot;
 okc.clean$ethnicity = as.factor(okc.clean$ethnicity)
 levels(okc.clean$ethnicity)</code></pre>
 <pre><code>##  [1] &quot;asian&quot;            &quot;black&quot;            &quot;hispanic / latin&quot; &quot;indian&quot;          
@@ -1780,7 +1782,8 @@ levels(okc.clean$ethnicity)</code></pre>
 ##                       
 ##                       
 ## </code></pre>
-<pre class="r"><code>rm(character.vars,colnames.okc.clean,okc.keep,summary.NAs,smokes,status)</code></pre>
+<pre class="r"><code>rm(character.vars, colnames.okc.clean, okc.keep, summary.NAs, 
+    smokes, status)</code></pre>
 </div>
 <div id="descriptive-statistics" class="section level3">
 <h3>Descriptive Statistics</h3>
