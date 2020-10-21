@@ -1,13 +1,13 @@
 ---
 title: "Body Type Prediction - Based on okcupid.com User Information"
 output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
   html_document:
     df_print: paged
     toc: yes
     toc_depth: '3'
-  pdf_document:
-    toc: yes
-    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
